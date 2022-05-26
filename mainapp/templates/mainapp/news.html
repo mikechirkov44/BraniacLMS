@@ -4,19 +4,19 @@
 
 {% with news_range as double_range %}
 
-    
+
 
 <div class="row">
 
   <div class="col-lg-8">
     
-    {% for item in double_range  %}
+    {% for item in object_list  %}
     
     <div class="card my-2">
       <div class="card-body">
-        <h5 class="card-title">{{ news_title }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{ datetime_obj|date:"Y-m-d h-i"  }}</h6>
-        <p class="card-text">{{ news_preview }}</p>
+        <h5 class="card-title">{{ item.title }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ item.created|date:"Y-m-d h-i"  }}</h6>
+        <p class="card-text">{{ item.preamble }}</p>
         <a href="#" class="card-link">Подробнее</a>
       </div>
     </div>
