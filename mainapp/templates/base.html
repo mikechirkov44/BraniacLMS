@@ -27,7 +27,6 @@
     <div class="container-md">
 
         {% block content %}
-         Блочный контент
         {% endblock content %}
 
     </div>
@@ -110,7 +109,8 @@
         <!-- FontAwesome -->
         <script src="{% static 'js/fontawesome.all.min.js' %}"></script>
     
-    
+    {% block js %}
+    {% endblock %}
     
     </body>
     

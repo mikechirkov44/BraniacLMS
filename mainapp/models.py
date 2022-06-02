@@ -1,3 +1,5 @@
+from random import choices, vonmisesvariate
+from django.conf import settings
 from django.db import models
 
 NULLABLE = {'blank': True, 'null': True}
@@ -26,7 +28,7 @@ class NewsManager(models.Manager):
 
 
 class News(BaseModel):
-    objects = NewsManager()
+    #objects = NewsManager()
     title = models.CharField(max_length=256, verbose_name="Заголовок")
     preamble = models.CharField(max_length=1024, verbose_name="Вступление")
     body = models.TextField(blank=True, null=True, verbose_name="Содержимое")
@@ -80,3 +82,23 @@ class CoursesTeacher(BaseModel):
 
 
 
+class CourseFeedback(BaseModel):
+   
+    RATINGS = (
+        (5, '⭐⭐⭐⭐⭐'),
+        (4, '⭐⭐⭐⭐'),
+        (3, '⭐⭐⭐'),
+        (2, '⭐⭐'),
+        (1, '⭐'),
+    )
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Course')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='User')
+    rating = models.SmallIntegerField(choices=RATINGS, default=5, verbose_name='rating')
+    feedback = models.TextField(verbose_name='Feedback', default='No Feedback')
+
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
+
+        def __str__(self):
+            return f'Отзыв на {self.course} от {self.user}'
