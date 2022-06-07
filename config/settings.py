@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from email.message import Message
 from pathlib import Path
 from telnetlib import AUTHENTICATION
+from xmlrpc.client import INTERNAL_ERROR
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +28,13 @@ SECRET_KEY = "django-insecure-=!#=yk*cvl41z9e73o$(=um1nz@k1t^t*4f9te0w))q13to^ch
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+if DEBUG:
+    INTERNAL_IPS = [
+        '127.0.0.1'
+]
+
 
 
 # Application definition
@@ -41,6 +48,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "social_django",
     "crispy_forms",
+    "debug_toolbar",
+
     "mainapp",
     "authapp",
 
@@ -54,6 +63,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -159,3 +169,51 @@ SOCIAL_AUTH_GITHUB_KEY = '0f8400c9c474f4ff6d29'
 SOCIAL_AUTH_GITHUB_SECRET= '4279827a78410ccb4fc0ce2a0b7469101a505abb'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOG_FILE = BASE_DIR / "log" / "main_log.log"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "console": {
+            "format": "[%(asctime)s] %(levelname)s %(name)s (%(lineno)d) %(message)s"
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": LOG_FILE,
+            "formatter": "console",
+        },
+        "console": {"class": "logging.StreamHandler", "formatter": "console"},
+    },
+    "loggers": {
+        "django": {"level": "INFO", "handlers": ["file", "console"]},
+    },
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': "django_redis.cache.RedisCache",
+        'LOCATION': "redis://127.0.0.1:6379",
+        'OPTIONS': {
+            'CLIENT_CLASS':"django_redis.client.DefaultClient"
+        },
+    }
+}
+
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+# 
+# EMAIL_HOST = ""
+# EMAIL_PORT = 25
+# EMAIL_HOST_USER = ""
+# EMAIL_HOST_PASSWORD = ""
+# EMAIL_USE_SSL = True
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = 'emails-tmp'
+

@@ -33,6 +33,7 @@
                             {% endif %}
                             {% if user.is_superuser %}
                                 <a class="dropdown-item" href="{% url 'admin:index' %}">Административный раздел</a>
+                                <a class="dropdown-item" href="{% url 'mainapp:logs_list' %}">Логи</a>
                             {% endif %}
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{% url 'authapp:logout' %}">Выход</a>
@@ -47,10 +48,7 @@
                     <li class="nav-item {% if request.resolver_match.view_name == 'mainapp:contacts' %} active {% endif %}">
                         <a class="nav-link" href="{%url 'mainapp:contacts' %}">Контакты</a>
                     </li>
-                  
-                    
-                        
-                    
+
                     </ul>
                 <span><a href="#">🇷🇺</a> <i class="fas fa-grip-lines-vertical"></i> <a href="#">🇬🇧</a></span>
             </div>
