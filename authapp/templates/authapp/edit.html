@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags i18n %}
+{% block content %}
+<form class="col-12 m-auto pt-5 pb-6" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy}}       
+        <p>
+            <button type="submit" class="btn btn-primary btn-block">
+                {% translate "save" %}
+            </button>
+        </p>
+    </form>
+
+{% endblock %}
+
+{% block js %}
+<script>
+    $(document).ready(function () {
+        {% if messages %}
+            // Toasts
+            $(".toast").toast({delay: 5000});
+            $(".toast").toast("show");
+        {% endif %}
+    });
+</script>
+{% endblock %}
